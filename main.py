@@ -188,9 +188,7 @@ def main(args):
     args.lr = linear_scaled_lr
     optimizer = torch.optim.Adam(model.classifier.parameters())
 
-    loss_scaler = scaler = torch.cuda.amp.GradScaler(enabled=True)
-
-    lr_scheduler, _ = create_scheduler(args, optimizer)
+    scaler = torch.cuda.amp.GradScaler(enabled=True)
 
     criterion = torch.nn.CrossEntropyLoss()
     
@@ -258,48 +256,6 @@ def main(args):
         torch.save(model, './all_model.pth')
 
             
-
-        # lr_scheduler.step(epoch)
-        # # if args.output_dir:
-        # #     checkpoint_paths = [output_dir / 'checkpoint.pth']
-        # #     if args.save_every is not None:
-        # #         if epoch % args.save_every == 0: checkpoint_paths.append(output_dir / 'checkpoint_{}.pth'.format(epoch))
-        # #     for checkpoint_path in checkpoint_paths:
-        # #         utils.save_on_master({
-        # #             'model': model_without_ddp.state_dict(),
-        # #             'optimizer': optimizer.state_dict(),
-        # #             'lr_scheduler': lr_scheduler.state_dict(),
-        # #             'epoch': epoch,
-        # #             'model_ema': get_state_dict(model_ema) if model_ema else None,
-        # #             'args': args,
-        # #         }, checkpoint_path)
-
-        # test_stats = evaluate(data_loader_val, model, device)
-        # if max_accuracy <= test_stats["acc1"]:
-        #     max_accuracy = test_stats["acc1"]
-        #             # if args.output_dir:
-        #             #     checkpoint_paths = [output_dir / 'best-checkpoint.pth']
-        #             #     utils.save_on_master({
-        #             #         'model': model_without_ddp.state_dict(),
-        #             #         'optimizer': optimizer.state_dict(),
-        #             #         'lr_scheduler': lr_scheduler.state_dict(),
-        #             #         'epoch': epoch,
-        #             #         'model_ema': get_state_dict(model_ema) if model_ema else None,
-        #             #         'args': args,
-        #             #     }, checkpoint_path)
-                        
-        # print(f"Accuracy of the network on the {len(dataset_val)} test images: {test_stats['acc1']:.1f}%")
-        # max_accuracy = max(max_accuracy, test_stats["acc1"])
-        # print(f'Max accuracy: {max_accuracy:.2f}%')
-
-        # log_stats = {**{f'train_{k}': v for k, v in train_stats.items()},
-        #              **{f'test_{k}': v for k, v in test_stats.items()},
-        #              'epoch': epoch}
-        # print(log_stats)
-
-        # if args.output_dir: # and utils.is_main_process():
-        #     with (output_dir / "log.txt").open("a") as f:
-        #         f.write(json.dumps(log_stats) + "\n")
 
     total_time = time.time() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
